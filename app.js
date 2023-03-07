@@ -10,7 +10,7 @@ if (env.error) {
 const Sequelize = require('sequelize');
 
 const {
-    Client, Collection, Events, GatewayIntentBits, bold, italic, strikethrough, underscore, spoiler, quote, blockQuote,
+    Client, Collection, Events, GatewayIntentBits, REST, Routes,
     userMention, codeBlock
 } = require("discord.js");
 
@@ -39,6 +39,7 @@ const client = new Client({
 });
 
 client.commands = new Collection();
+const commandsToJson = [];
 
 const commandsPath = path.join(__dirname, "commands");
 const commandFiles = fs
@@ -51,12 +52,33 @@ for (const file of commandFiles) {
     // Set a new item in the Collection with the key as the command name and the value as the exported module
     if ("data" in command && "execute" in command) {
         client.commands.set(command.data.name, command);
+        commandsToJson.push(command.data.toJSON());
     } else {
         console.log(
             `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
         );
     }
 }
+
+const rest = new REST({ version: '10' }).setToken(env.parsed.DISCORD_BOT_KEY);
+
+// and deploy your commands!
+(async () => {
+    try {
+        console.log(`Started refreshing ${commandsToJson.length} application (/) commands.`);
+
+        // The put method is used to fully refresh all commands in the guild with the current set
+        const data = await rest.put(
+            Routes.applicationCommands(env.parsed.DISCORD_APPLICATION_ID),
+            { body: commandsToJson },
+        );
+
+        console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+    } catch (error) {
+        // And of course, make sure you catch and log any errors!
+        console.error(error);
+    }
+})();
 
 const modelsPath = path.join(__dirname, "models");
 const modelFiles = fs
