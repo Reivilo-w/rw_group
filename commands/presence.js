@@ -7,7 +7,7 @@ module.exports = {
     async execute(interaction) {
         await interaction
             .reply("À quelle heure commence la soirée (Format `23h59`) ?")
-            .then(() => {
+            .then(askHour => {
                 const filterHeure = (m) =>
                     m.content.length === 5 &&
                     m.content.includes("h") &&
@@ -28,13 +28,15 @@ module.exports = {
                         if (parseInt(inputHour[0]) > 23) inputHour[0] = 0;
 
                         event.setHours(inputHour[0], inputHour[1]);
+                        interaction.deleteReply();
+                        collectTime.first().delete();
 
-                        interaction.followUp("Quel sera le programme ?").then(() => {
+                        interaction.followUp("Quel sera le programme (vous avez 2 minutes pour le taper 👀 ) ?").then((followUp) => {
                             interaction.channel
                                 .awaitMessages({
                                     filter: (m) => m.author.id === interaction.user.id,
                                     max: 1,
-                                    time: 30000,
+                                    time: 120000,
                                     errors: ["time"],
                                 })
                                 .then((collectProgram) => {
@@ -67,14 +69,17 @@ module.exports = {
                                                 .setStyle(ButtonStyle.Danger),
                                             //coment
                                         );
-                                    interaction.channel.send({embeds: [embedMessage], components: [row]});
+                                    followUp.delete()
+                                    collectProgram.first().delete().then(() => {
+                                        interaction.channel.send({embeds: [embedMessage], components: [row]}).then();
+                                    });
                                 })
                                 .catch((collectProgram) => {
                                     console.log(collectProgram);
                                     interaction.channel.bulkDelete(1, false);
                                     interaction.followUp({
                                         content:
-                                            "Pas de réponse de votre part sous 30 secondes, fin de la procédure.",
+                                            "Pas de réponse de votre part sous 2 minutes, fin de la procédure.",
                                         ephemeral: true,
                                     });
                                 });
