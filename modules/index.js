@@ -1,4 +1,8 @@
+// Connections
 const {client} = require('./connections/discord');
 const {sequelize} = require('./connections/mysql');
 
-module.exports = {client, sequelize};
+// Embeds
+const {presenceEmbed} = require('./embeds/presenceEmbed');
+
+module.exports = {client, sequelize, presenceEmbed};

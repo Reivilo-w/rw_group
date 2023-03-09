@@ -2,20 +2,16 @@ const {Sequelize} = require('sequelize');
 const {sequelize} = require('../modules/connections/mysql');
 
 
-const Presences = sequelize.define('rw_presence', {
-    message: Sequelize.STRING,
-    user: Sequelize.STRING,
-    presence: {
-        type: Sequelize.SMALLINT,
-        defaultValue: 0,
-        allowNull: false,
-    }
+const Settings = sequelize.define('rw_settings', {
+    name: Sequelize.STRING,
+    guild: Sequelize.STRING,
+    value: Sequelize.STRING,
 });
 
-Presences.sync().then(() => {
-    console.log('Presences table created successfully!');
+Settings.sync(true).then(() => {
+    console.log('Settings table created successfully!');
 }).catch((error) => {
     console.error('Unable to create table : ', error);
 });
 
-module.exports = {Presences};
+module.exports = {Settings};

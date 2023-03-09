@@ -61,12 +61,7 @@ const rest = new REST({version: '10'}).setToken(env.parsed.DISCORD_BOT_KEY);
 client.once(Events.ClientReady, (c) => {
 
     client.user.setPresence({
-        status: 'dnd',
-        activities: {
-            name: 'TestBot',
-            type: 'STREAMING',
-            url: 'https://twitch.tv/reivilow_'
-        }
+        activities: [{name: env.parsed.DEBUG === 'true' ? 'debug' : 'Ražnatović', type: 3}], status: 'dnd'
     });
     console.log(`Ready! Logged in as ${c.user.tag}`);
 });

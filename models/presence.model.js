@@ -2,7 +2,7 @@ const {Sequelize} = require('sequelize');
 const {sequelize} = require('../modules/connections/mysql');
 
 
-const Presences = sequelize.define('rw_presence', {
+const Presences = sequelize.define('rw_presences', {
     message: Sequelize.STRING,
     user: Sequelize.STRING,
     presence: {
