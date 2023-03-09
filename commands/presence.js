@@ -1,4 +1,6 @@
-const {SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle} = require("discord.js");
+const {SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, roleMention} = require("discord.js");
+const {presenceEmbed} = require("../modules");
+const {Settings} = require("../models/settings.model");
 
 const data = new SlashCommandBuilder()
     .setName("presence")
@@ -47,16 +49,9 @@ module.exports = {
             const programme = collectProgram.first().content;
 
             const time = Math.floor(event.getTime() / 1000);
-            const embedMessage = new EmbedBuilder()
-                .setDescription(
-                    `Pour le <t:${time}:f>\n\n**Programme:**\n${programme}`
-                )
-                .addFields(
-                    {name: "✅ Présent", value: "```0```", inline: true},
-                    {name: "⏳ En Retard", value: "```0```", inline: true},
-                    {name: "❌ Absent", value: "```0```", inline: true}
-                )
-                .setTitle('Présence');
+            const embedMessage = presenceEmbed({
+                description: `Pour le <t:${time}:f>\n\n**Programme:**\n${programme}`
+            });
             const row = new ActionRowBuilder()
                 .addComponents(
                     new ButtonBuilder()
@@ -74,10 +69,19 @@ module.exports = {
                     //coment
                 );
             followUp.delete();
+            const presence_ping_role = await Settings.findOne({
+                attributes: ['value'],
+                where: {guild: interaction.guild.id, name: 'rw:presence_ping_role'}
+            })
             collectProgram.first().delete().then(() => {
-                interaction.channel.send({embeds: [embedMessage], components: [row]}).then();
+                interaction.channel.send({embeds: [embedMessage], components: [row]}).then(()=>{
+                    if (presence_ping_role !== null) {
+                        interaction.channel.send(roleMention(presence_ping_role.value));
+                    }
+                });
             });
         } catch (e) {
+            console.log(e);
             interaction.channel.bulkDelete(1, false);
             interaction.followUp({
                 content:
