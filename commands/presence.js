@@ -1,6 +1,15 @@
-const {SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, roleMention} = require("discord.js");
+const {
+    SlashCommandBuilder,
+    EmbedBuilder,
+    ActionRowBuilder,
+    ButtonBuilder,
+    ButtonStyle,
+    roleMention, userMention
+} = require("discord.js");
 const {presenceEmbed} = require("../modules");
 const {Settings} = require("../models/settings.model");
+const {PresenceMessages} = require("../models/presenceMessage.model");
+const {Sequelize} = require("sequelize");
 
 const data = new SlashCommandBuilder()
     .setName("presence")
@@ -72,12 +81,26 @@ module.exports = {
             const presence_ping_role = await Settings.findOne({
                 attributes: ['value'],
                 where: {guild: interaction.guild.id, name: 'rw:presence_ping_role'}
-            })
-            collectProgram.first().delete().then(() => {
-                interaction.channel.send({embeds: [embedMessage], components: [row]}).then(()=>{
-                    if (presence_ping_role !== null) {
-                        interaction.channel.send(roleMention(presence_ping_role.value));
+            });
+            collectProgram.first().delete().then(async () => {
+                const messagePresence = await interaction.channel.send({embeds: [embedMessage], components: [row]});
+
+                let roleMessage = {};
+                if (presence_ping_role !== null) {
+                    let roleMessageContent = roleMention(presence_ping_role.value);
+                    const presence_role = await interaction.guild.roles.fetch(presence_ping_role.value);
+                    if (presence_role !== null) {
+                        roleMessageContent += "\n Non votants:";
+                        presence_role.members.forEach(m => {
+                            roleMessageContent += `\n${userMention(m.id)}`;
+                        });
                     }
+                    roleMessage = await interaction.channel.send(roleMessageContent);
+                }
+
+                await PresenceMessages.create({
+                    messagePresence: messagePresence.id,
+                    messagePing: roleMessage.id || ''
                 });
             });
         } catch (e) {

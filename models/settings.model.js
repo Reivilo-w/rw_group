@@ -8,7 +8,7 @@ const Settings = sequelize.define('rw_settings', {
     value: Sequelize.STRING,
 });
 
-Settings.sync(true).then(() => {
+Settings.sync().then(() => {
     console.log('Settings table created successfully!');
 }).catch((error) => {
     console.error('Unable to create table : ', error);
