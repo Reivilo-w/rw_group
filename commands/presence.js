@@ -24,7 +24,7 @@ module.exports = {
 
             const filterHeure = (m) =>
                 m.content.length === 5 &&
-                m.content.includes("h") &&
+                m.content.toLowerCase().includes("h") &&
                 m.author.id === interaction.user.id;
 
             const collectTime = await interaction.channel
