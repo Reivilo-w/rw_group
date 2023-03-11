@@ -8,7 +8,8 @@ const GroupMoney = sequelize.define('rw_groupmoney', {
         values: ['add', 'remove']
     }),
     amount: Sequelize.FLOAT,
-    description: Sequelize.STRING
+    description: Sequelize.STRING,
+    user: Sequelize.STRING
 });
 
 GroupMoney.sync().then(() => {

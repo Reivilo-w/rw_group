@@ -1,6 +1,6 @@
 const {
     SlashCommandBuilder,
-    PermissionFlagsBits, EmbedBuilder, bold
+    PermissionFlagsBits, EmbedBuilder, bold, userMention
 } = require("discord.js");
 const {GroupMoney} = require("../models");
 const {Sequelize} = require("sequelize");
@@ -19,7 +19,7 @@ const data = new SlashCommandBuilder()
         subcommand
             .setName('remove')
             .setDescription(`Retirer de l'argent au coffre du groupe`)
-            .addIntegerOption(option => option.setName('montant').setDescription('Le montant à retirer au groupe').setRequired(true))
+            .addIntegerOption(option => option.setName('montant').setDescription('Le montant à retirer au group').setRequired(true))
             .addStringOption(option => option.setName('description').setDescription('La raison de la transaction').setRequired(true))
     );
 
@@ -29,12 +29,14 @@ module.exports = {
         const subCommand = interaction.options.getSubcommand();
         const amount = parseFloat(interaction.options.getInteger("montant") || 0);
         const reason = interaction.options.getString("description") || '';
+        const user = interaction.user.id;
 
         await GroupMoney.create({
             guild: interaction.guild.id,
             type: subCommand,
             amount: amount,
-            description: reason
+            description: reason,
+            user: user
         });
 
         const totalPerGuild = await GroupMoney.findAll({
@@ -52,7 +54,7 @@ module.exports = {
         const totalToShow = new Intl.NumberFormat("es-US").format(total) + ' $';
         const txAmount = new Intl.NumberFormat("en-US").format(amount) + ' $';
         const txType = subCommand === 'add' ? 'ajoutés' : 'retirés';
-        const content = `${bold(txAmount)} ont été ${txType} du groupe pour la raison suivante : "${reason}".\n\nNouveau total: ${bold(totalToShow)}`;
+        const content = `${userMention(user)} a ${txType} ${bold(txAmount)} du groupe pour la raison suivante : "${reason}".\n\nNouveau total: ${bold(totalToShow)}`;
 
         const embedColor = subCommand === 'add' ? 0x00FF00 : 0xFF0000;
 
