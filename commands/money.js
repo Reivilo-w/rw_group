@@ -53,7 +53,7 @@ module.exports = {
 
         const totalToShow = new Intl.NumberFormat("es-US").format(total) + ' $';
         const txAmount = new Intl.NumberFormat("en-US").format(amount) + ' $';
-        const txType = subCommand === 'add' ? 'ajoutés' : 'retirés';
+        const txType = subCommand === 'add' ? 'ajouté' : 'retiré';
         const content = `${userMention(user)} a ${txType} ${bold(txAmount)} du groupe pour la raison suivante : "${reason}".\n\nNouveau total: ${bold(totalToShow)}`;
 
         const embedColor = subCommand === 'add' ? 0x00FF00 : 0xFF0000;
