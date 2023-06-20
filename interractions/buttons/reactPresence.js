@@ -28,6 +28,7 @@ const listenButtonPresence = client.on(Events.InteractionCreate, async interacti
             await Presences.create({
                 message: message.id,
                 user: interaction.user.id,
+                guild: interaction.guild.id,
                 presence: presenceValues[updateStatus]
             });
 

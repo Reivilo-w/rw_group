@@ -9,10 +9,11 @@ const Presences = sequelize.define('rw_presences', {
         type: Sequelize.SMALLINT,
         defaultValue: 0,
         allowNull: false,
-    }
+    },
+    guild: Sequelize.STRING,
 });
 
-Presences.sync().then(() => {
+Presences.sync({ alter: true }).then(() => {
     console.log('Presences table created successfully!');
 }).catch((error) => {
     console.error('Unable to create table : ', error);
