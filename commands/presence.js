@@ -100,7 +100,8 @@ module.exports = {
 
                 await PresenceMessages.create({
                     messagePresence: messagePresence.id,
-                    messagePing: roleMessage.id || ''
+                    messagePing: roleMessage.id || '',
+                    guild: interaction.guild.id,
                 });
             });
         } catch (e) {
