@@ -3,6 +3,8 @@ const {Events, codeBlock, userMention, roleMention} = require("discord.js");
 const {Presences} = require("../../models");
 const {Settings} = require("../../models/settings.model");
 const {PresenceMessages} = require("../../models/presenceMessage.model");
+const dotenv = require("dotenv");
+const env = dotenv.config();
 
 const presenceArray = {
     1: '✅ Présent',
