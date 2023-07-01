@@ -90,7 +90,7 @@ const listenButtonPresence = client.on(Events.InteractionCreate, async interacti
 
                     if(msgPing !== null) {
                         const msgToEdit = await interaction.channel.messages.fetch(msgPing.messagePing);
-                        msgToEdit.edit(roleMessageContent);
+                        if(msgToEdit !== null) msgToEdit.edit(roleMessageContent);
                     }
                 }
             }
