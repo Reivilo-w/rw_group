@@ -27,7 +27,7 @@ module.exports = {
             await interaction.reply({content: 'Génération en cours...', ephemeral: true})
             const today = moment(new Date(), 'YYYY-MM-DD 00:00:00').subtract(1, 'days').format('YYYY-MM-DD 00:00:00');
             const duree = parseInt(interaction.options.getString("duree") || 3);
-            const minusDays = moment().subtract(duree + 1, 'days').format('YYYY-MM-DD 23:59:59');
+            const minusDays = moment().subtract(duree, 'days').format('YYYY-MM-DD 23:59:59');
             console.log(today, minusDays);
 
             const guildId = interaction.guild.id;
