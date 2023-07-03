@@ -59,6 +59,7 @@ const createImage = async (stats) => {
         }
     }
 
+    console.log(stats);
     for (const stat in stats) {
         configuration.data.labels.push(stat);
         for(let i = 0; i < 4; i++) {
