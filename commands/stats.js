@@ -55,7 +55,10 @@ module.exports = {
 
                 for (const presence of presences) {
                     users[presence.user] = users[presence.user] || {};
-                    users[presence.user][presence.presence] = (users[presence.user][presence.presence] || 0) + 1;
+                    for(let i = 0; i < 3; i++) {
+                        users[presence.user][i] = users[presence.user][i] || 0;
+                    }
+                    users[presence.user][presence.presence]++;
                 }
             }
 

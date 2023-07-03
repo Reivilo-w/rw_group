@@ -40,10 +40,7 @@ const createImage = async (stats) => {
             },
             scales: {
                 x: {
-                    stacked: true,
-                    ticks: {
-                        stepSize: 1
-                    }
+                    stacked: true
                 },
                 y: {
                     stacked: true,
