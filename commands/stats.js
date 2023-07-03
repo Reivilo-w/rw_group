@@ -24,7 +24,7 @@ module.exports = {
     data,
     async execute(interaction) {
         try {
-            interaction.reply({content: 'Génération en cours...', ephemeral: true})
+            await interaction.reply({content: 'Génération en cours...', ephemeral: true})
             const today = moment(new Date(), 'YYYY-MM-DD 00:00:00').subtract(0, 'days').format('YYYY-MM-DD 00:00:00'); // repasser a 1
             const duree = parseInt(interaction.options.getString("duree") || 3);
             const minusDays = moment().subtract(duree + 1, 'days').format('YYYY-MM-DD 23:59:59');
