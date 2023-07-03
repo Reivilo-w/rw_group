@@ -55,9 +55,8 @@ const createImage = async (stats) => {
 
     for (const stat in stats) {
         configuration.data.labels.push(stat);
-        for (const dataSet in stats[stat]) {
-            const index = parseInt(dataSet - 1);
-            configuration.data.datasets[index].data.push(stats[stat][dataSet]);
+        for(let i = 0; i < 3; i++) {
+            configuration.data.datasets[i].data.push(stats[stat][i]);
         }
     }
 

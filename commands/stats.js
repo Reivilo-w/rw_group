@@ -58,7 +58,8 @@ module.exports = {
                     for(let i = 0; i < 3; i++) {
                         users[presence.user][i] = users[presence.user][i] || 0;
                     }
-                    users[presence.user][presence.presence]++;
+                    const index = parseInt(presence.presence) - 1;
+                    users[presence.user][index]++;
                 }
             }
 
