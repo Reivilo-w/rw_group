@@ -23,7 +23,6 @@ const data = new SlashCommandBuilder()
 module.exports = {
     data,
     async execute(interaction) {
-        await interaction.deferUpdate();
         try {
             const today = moment(new Date(), 'YYYY-MM-DD 00:00:00').subtract(0, 'days').format('YYYY-MM-DD 00:00:00'); // repasser a 1
             const duree = parseInt(interaction.options.getString("duree") || 3);
@@ -81,6 +80,7 @@ module.exports = {
             console.log(exception);
             await interaction.followUp({content: 'Impossible de récupérer les stats, réessayez plus tard.', ephemeral: true})
         }
+        return interaction.deferUpdate()
     },
 };
 
