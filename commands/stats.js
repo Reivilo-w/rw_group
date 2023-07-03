@@ -80,7 +80,6 @@ module.exports = {
             console.log(exception);
             await interaction.followUp({content: 'Impossible de récupérer les stats, réessayez plus tard.', ephemeral: true})
         }
-        return interaction.deferUpdate()
     },
 };
 
