@@ -1,6 +1,6 @@
 const {ChartJSNodeCanvas} = require('chartjs-node-canvas');
-const width = 500;   // define width and height of canvas
-const height = 300;
+const width = 1000;   // define width and height of canvas
+const height = 600;
 const chartCallback = (ChartJS) => {
     console.log('chart built')
 };
