@@ -24,6 +24,7 @@ module.exports = {
     data,
     async execute(interaction) {
         try {
+            interaction.reply({content: 'Génération en cours...', ephemeral: true})
             const today = moment(new Date(), 'YYYY-MM-DD 00:00:00').subtract(0, 'days').format('YYYY-MM-DD 00:00:00'); // repasser a 1
             const duree = parseInt(interaction.options.getString("duree") || 3);
             const minusDays = moment().subtract(duree + 1, 'days').format('YYYY-MM-DD 23:59:59');
@@ -74,7 +75,6 @@ module.exports = {
             const sfattach = new AttachmentBuilder(sfbuff, "output.png");
 
             // console.log(users);
-            //interaction.reply({content: 'Encore en cours de développement.', ephemeral: true})
             await interaction.followUp({content: 'Encore en cours de développement.', ephemeral: true, files: [sfattach]})
         } catch (exception) {
             console.log(exception);
