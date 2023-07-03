@@ -25,7 +25,7 @@ module.exports = {
     async execute(interaction) {
         try {
             await interaction.reply({content: 'Génération en cours...', ephemeral: true})
-            const today = moment(new Date(), 'YYYY-MM-DD 00:00:00').subtract(0, 'days').format('YYYY-MM-DD 00:00:00'); // repasser a 1
+            const today = moment(new Date(), 'YYYY-MM-DD 00:00:00').subtract(1, 'days').format('YYYY-MM-DD 00:00:00');
             const duree = parseInt(interaction.options.getString("duree") || 3);
             const minusDays = moment().subtract(duree + 1, 'days').format('YYYY-MM-DD 23:59:59');
             console.log(today, minusDays);
@@ -55,11 +55,13 @@ module.exports = {
 
                 for (const presence of presences) {
                     users[presence.user] = users[presence.user] || {};
-                    for(let i = 0; i < 3; i++) {
+                    users[presence.user][0] = users[presence.user][0] || duree;
+                    for(let i = 1; i <= 3; i++) {
                         users[presence.user][i] = users[presence.user][i] || 0;
                     }
                     const index = parseInt(presence.presence) - 1;
                     users[presence.user][index]++;
+                    users[presence.user][0]--;
                 }
             }
 

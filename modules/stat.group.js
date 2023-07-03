@@ -13,6 +13,12 @@ const createImage = async (stats) => {
             labels: [],
             datasets: [
                 {
+                    label: "Absence de vote",
+                    data: [],
+                    fill: false,
+                    backgroundColor: ['rgb(90,90,90)'],
+                },
+                {
                     label: "Présent",
                     data: [],
                     fill: false,
@@ -55,7 +61,7 @@ const createImage = async (stats) => {
 
     for (const stat in stats) {
         configuration.data.labels.push(stat);
-        for(let i = 0; i < 3; i++) {
+        for(let i = 0; i < 4; i++) {
             configuration.data.datasets[i].data.push(stats[stat][i]);
         }
     }
