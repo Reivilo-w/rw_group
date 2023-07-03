@@ -55,7 +55,7 @@ module.exports = {
 
                 for (const presence of presences) {
                     users[presence.user] = users[presence.user] || {};
-                    users[presence.user][0] = users[presence.user][0] || duree;
+                    users[presence.user][0] = users[presence.user][0] || presenceMessagesLast7Days.length;
                     for(let i = 1; i <= 3; i++) {
                         users[presence.user][i] = users[presence.user][i] || 0;
                     }
