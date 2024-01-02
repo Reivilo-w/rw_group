@@ -22,6 +22,21 @@ const listenButtonPresence = client.on(Events.InteractionCreate, async interacti
     if (!interaction.isButton()) return;
     if (interaction.customId.startsWith('rw_presence')) {
         try {
+            const presence_ping_role = await Settings.findOne({
+                attributes: ['value'],
+                where: {guild: interaction.guild.id, name: 'rw:presence_ping_role'}
+            });
+
+            if (presence_ping_role !== null) {
+                const memberHasRole = interaction.member.roles.cache.some(role => role.id === presence_ping_role.value);
+                if (memberHasRole === false) {
+                    return interaction.reply({
+                        content: `Vous ne pouvez pas réagir à cette présence, force à vous (il vous manque le rôle ${roleMention(presence_ping_role.value)}).`,
+                        ephemeral: true
+                    })
+                }
+            }
+
             const updateStatus = interaction.customId.split(':')[1];
             const message = interaction.message;
 
@@ -62,10 +77,6 @@ const listenButtonPresence = client.on(Events.InteractionCreate, async interacti
 
             message.embeds[0].data.fields = fields;
 
-            const presence_ping_role = await Settings.findOne({
-                attributes: ['value'],
-                where: {guild: interaction.guild.id, name: 'rw:presence_ping_role'}
-            });
             if (presence_ping_role !== null) {
                 let roleMessageContent = roleMention(presence_ping_role.value);
                 const presence_role = await interaction.guild.roles.fetch(presence_ping_role.value);
@@ -77,7 +88,7 @@ const listenButtonPresence = client.on(Events.InteractionCreate, async interacti
                             roleMessageContent += `\n${userMention(m.id)}`;
                         }
                     });
-                    if(roleMessageContent.endsWith(startMessage)) {
+                    if (roleMessageContent.endsWith(startMessage)) {
                         roleMessageContent = '✅ Tous les participants ont voté';
                     }
 
@@ -88,9 +99,9 @@ const listenButtonPresence = client.on(Events.InteractionCreate, async interacti
                         }
                     });
 
-                    if(msgPing !== null) {
+                    if (msgPing !== null) {
                         const msgToEdit = await interaction.channel.messages.fetch(msgPing.messagePing);
-                        if(msgToEdit !== null) msgToEdit.edit(roleMessageContent);
+                        if (msgToEdit !== null) msgToEdit.edit(roleMessageContent);
                     }
                 }
             }
