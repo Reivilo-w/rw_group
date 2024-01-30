@@ -38,6 +38,13 @@ module.exports = {
                 try {
                     const role = interaction.options.getRole("role");
                     let response = 'Erreur inconnue';
+                    Settings.destroy({
+                        where: {
+                            name: 'rw:presence_ping_role',
+                            guild: interaction.guild.id
+                        }
+                    });
+
                     if (role !== null) {
                         Settings.create({
                             name: 'rw:presence_ping_role',
@@ -46,12 +53,6 @@ module.exports = {
                         });
                         response = `Le rôle ${roleMention(role.id)} sera ping à chaque check de présence.`;
                     } else {
-                        Settings.destroy({
-                            where: {
-                                name: 'rw:presence_ping_role',
-                                guild: interaction.guild.id
-                            }
-                        });
                         response = 'Le rôle a bien été supprimé et ne sera plus ping.';
                     }
 
