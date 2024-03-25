@@ -43,7 +43,7 @@ module.exports = {
             if (parseInt(inputHour[0]) > 23) inputHour[0] = 0;
 
             event.setHours(inputHour[0], inputHour[1]);
-            interaction.deleteReply();
+            await interaction.deleteReply();
             collectTime.first().delete();
 
             const followUp = await interaction.followUp("Quel sera le programme (vous avez 2 minutes pour le taper 👀 ) ?");
